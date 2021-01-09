@@ -18,6 +18,19 @@ typedef struct produtos{
 } produtos;
 
 
+void leArquivo(){
+    FILE *ptArq, *arqSaida;
+    ptArq = fopen("arquivo.in", "r");
+
+    if(ptArq == NULL){
+        printf("Ocorreu um problema ao abrir o arquivo.\n");
+        return 0;
+    }else{
+
+    }
+}
+
+
 produtos *alocaNovoProduto(produto componente){
     produtos *novoProduto;
 
@@ -50,8 +63,16 @@ void cadastraProcesso(produto componente, produtos *lista){
             aux = aux->nextProduto;
         }
         if(aux->prd.id == novoProduto->prd.id){
-            aux->prd.id = novoProduto->prd.id;
-            aux->prd.quantidade += novoProduto->prd.quantidade;
+            printf("Deseja adicionar mais produtos? \n1 -> SIM ou 2 -> NAO\n");
+            int ope = -1;
+            scanf("%d", &ope);
+            if(ope == 1){
+                aux->prd.id = novoProduto->prd.id;
+                aux->prd.quantidade += novoProduto->prd.quantidade;
+            }else{
+                printf("NAO PODEMOS SUBSTITUIR O PRODUTO");
+            }
+            
         }else{
             /* INSERÇÃO */
             novoProduto->nextProduto = aux->nextProduto;
@@ -134,7 +155,6 @@ void menu(){
     printf("\t10-SAIR\n\t");
 }
 
-
 void salvaProdutosArquivo(produtos *lista){
 	
 	produtos *aux = NULL;
@@ -173,13 +193,13 @@ int main(){
 
     while(escolha != 10){
         if(escolha == 1){
-            puts("Insira ID PRECO PRODUTO");
+            puts("Insira ID | PRECO | QUANTIDADE | PRODUTO");
             
             scanf("%d", &(componente.id));
             scanf("%lf", &(componente.preco));
-            scanf("%[^\n]s", &(componente.produto));
             scanf("%d", &(componente.quantidade));
-
+            scanf("%[^\n]s", &(componente.produto));
+            
             cadastraProcesso(componente, lista);
         }else if(escolha == 2){
             imprimeLista(lista);
@@ -192,10 +212,11 @@ int main(){
             puts("Insira o Produto a procurar");
             scanf("%[^\n]s", palavra);
             imprimeProdutoNome(lista, palavra);
+        }else if(escolha == 10){
+            return 0;
         }
         menu();
         scanf("%d", &escolha);
-        //system("cls");
     }
     salvaProdutosArquivo(lista);
     puts("SAINDO...");
