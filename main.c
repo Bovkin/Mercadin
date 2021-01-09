@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #define MAX_DESCR 50
+#define MAX 200
 
 typedef struct{
     int id;
@@ -19,14 +20,20 @@ typedef struct produtos{
 
 
 void leArquivo(){
-    FILE *ptArq, *arqSaida;
-    ptArq = fopen("arquivo.in", "r");
-
+    FILE *ptArq;
+    ptArq = fopen("arquivo.txt", "r");
+    char linha[300];
+    char *sub;
+    char texto[MAX] = {};
     if(ptArq == NULL){
         printf("Ocorreu um problema ao abrir o arquivo.\n");
         return 0;
     }else{
-
+        while (fgets(linha, 300, ptArq) != NULL){
+            linha[strcspn(linha, "\n")] = 0;
+            printf("ARQUIVO: %s\n", linha);
+        }
+        
     }
 }
 
@@ -152,6 +159,7 @@ void menu(){
     printf("\t2-LISTAR PRODUTOS\n");
     printf("\t3-PROCURAR PRODUTO POR ID\n");
     printf("\t4-PROCURAR PRODUTO POR NOME\n");
+    printf("\t5- \n");
     printf("\t10-SAIR\n\t");
 }
 
@@ -212,6 +220,8 @@ int main(){
             puts("Insira o Produto a procurar");
             scanf("%[^\n]s", palavra);
             imprimeProdutoNome(lista, palavra);
+        }else if(escolha == 5){
+            leArquivo();
         }else if(escolha == 10){
             return 0;
         }
