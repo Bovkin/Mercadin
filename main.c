@@ -19,22 +19,49 @@ typedef struct produtos{
 } produtos;
 
 
-void leArquivo(){
+void leArquivo(produtos *lista){
+
+    produtos *aux = lista;
+
+    produto componente;
+
     FILE *ptArq;
     ptArq = fopen("arquivo.txt", "r");
     char linha[300];
     char *sub;
-    char texto[MAX] = {};
+    char *texto;
+    char valores[6][50];
     if(ptArq == NULL){
         printf("Ocorreu um problema ao abrir o arquivo.\n");
         return 0;
     }else{
         while (fgets(linha, 300, ptArq) != NULL){
             linha[strcspn(linha, "\n")] = 0;
-            printf("ARQUIVO: %s\n", linha);
+            texto = strtok(linha, ";");
+            int i = 0;
+            while(texto != NULL){
+                strcpy(valores[i],texto);
+                texto = strtok(NULL, ";");
+                i++;
+            }
+            if(linha != NULL){
+                char preco[10], quantidade[10], id[10];
+                strcpy(id, valores[0]);
+                componente.id = atoi(id);
+                strcpy(preco, valores[1]);
+                componente.preco = atof(preco);
+                strcpy(componente.produto, valores[2]);
+                strcpy(quantidade, valores[0]);
+                componente.quantidade = atoi(quantidade);
+                cadastraProcesso(componente, aux);
+            }else{
+                puts("PRODUTOS CARREGADOS");
+            }
         }
         
+        /* IMPLEMENTAR ATRIBUIÇÃO OS DADOS A ESTRUTURA OU CRIAR UMA FUNÇÃO A PARTE QUE RECEBA A LINHA*/
     }
+    fclose(ptArq);
 }
 
 
@@ -221,7 +248,7 @@ int main(){
             scanf("%[^\n]s", palavra);
             imprimeProdutoNome(lista, palavra);
         }else if(escolha == 5){
-            leArquivo();
+            leArquivo(lista);
         }else if(escolha == 10){
             return 0;
         }
