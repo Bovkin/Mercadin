@@ -19,7 +19,7 @@ typedef struct produtos{
 } produtos;
 
 
-void leArquivo(produtos *lista){
+void readsFile(produtos *lista){
 
     produtos *aux = lista;
 
@@ -53,18 +53,18 @@ void leArquivo(produtos *lista){
                 strcpy(componente.produto, valores[2]);
                 strcpy(quantidade, valores[0]);
                 componente.quantidade = atoi(quantidade);
-                cadastraProcesso(componente, aux);
+                registerProduct(componente, aux);
             }else{
                 puts("PRODUTOS CARREGADOS");
             }
         }
-        /* IMPLEMENTAR ATRIBUIÇÃO OS DADOS A ESTRUTURA OU CRIAR UMA FUNÇÃO A PARTE QUE RECEBA A LINHA*/
+        /* TO_DO - IMPLEMENTAR ATRIBUIÇÃO OS DADOS A ESTRUTURA OU CRIAR UMA FUNÇÃO A PARTE QUE RECEBA A LINHA*/
     }
     fclose(ptArq);
 }
 
 
-produtos *alocaNovoProduto(produto componente){
+produtos *allocatesNewProduct(produto componente){
     produtos *novoProduto;
 
     novoProduto = (produtos *)malloc(sizeof(produtos));
@@ -81,10 +81,10 @@ produtos *alocaNovoProduto(produto componente){
 }
 
 
-void cadastraProcesso(produto componente, produtos *lista){
+void registerProduct(produto componente, produtos *lista){
     produtos *novoProduto, *aux;
 
-    novoProduto = alocaNovoProduto(componente);
+    novoProduto = allocatesNewProduct(componente);
     /* PRIORIDADE */
     if (lista->nextProduto == NULL){
         lista->nextProduto = novoProduto;
@@ -114,7 +114,7 @@ void cadastraProcesso(produto componente, produtos *lista){
     }
 }
 
-void imprimeLista(produtos *lista){
+void printList(produtos *lista){
     produtos *aux = NULL;
 
     if(lista->nextProduto != NULL){
@@ -129,7 +129,7 @@ void imprimeLista(produtos *lista){
     }
 }
 
-void imprimeProdutoId(produtos *lista, int id){
+void printProductsById(produtos *lista, int id){
     produtos *aux;
 
     aux = lista;
@@ -152,7 +152,7 @@ void imprimeProdutoId(produtos *lista, int id){
 }
 
 
-void imprimeProdutoNome(produtos *lista, char *prod){
+void printProductsByName(produtos *lista, char *prod){
     produtos *aux;
 
     char *ptAux;
@@ -202,7 +202,7 @@ void subMenuNome(){
     printf("\t10-VOLTAR\n\t");
 }
 
-void salvaProdutosArquivo(produtos *lista){
+void saveProductsToFile(produtos *lista){
 	
 	produtos *aux = NULL;
 
@@ -238,7 +238,7 @@ int main(){
     int id = -1;
     char palavra[MAX_DESCR + 1];
     
-    leArquivo(lista);
+    readsFile(lista);
 
     while(escolha != 10){
         if(escolha == 1){
@@ -251,12 +251,12 @@ int main(){
                 scanf("%d", &(componente.quantidade));
                 scanf("%[^\n]s", &(componente.produto));
                 
-                cadastraProcesso(componente, lista);
+                registerProduct(componente, lista);
                 printf("DESEJA CADASTRAR MAIS ALGUM PRODUTO?\n1 - CADASTRAR ou 2 - NAO CADASTRAR: ");
                 scanf("%d", &opcao);
             }
         }else if(escolha == 2){
-            imprimeLista(lista);
+            printList(lista);
         }else if(escolha == 3){
             system("clear||cls");
             int opcao = -1;           
@@ -268,7 +268,7 @@ int main(){
                 if(opcao == 1){
                     printf("INSIRA O ID: ");
                     scanf("%d", &id);
-                    imprimeProdutoId(lista, id);
+                    printProductsById(lista, id);
                     system("pause");
                     system("clear||cls");
                 }else if(opcao == 10){
@@ -281,7 +281,7 @@ int main(){
             fflush(stdin);
             printf("INSIRA O NOME DO PRODUTO: ");
             scanf("%[^\n]s", palavra);
-            imprimeProdutoNome(lista, palavra);
+            printProductsByName(lista, palavra);
             
             while(opcao != 10){
                 subMenuNome();
@@ -294,7 +294,7 @@ int main(){
         menu();
         scanf("%d", &escolha);
     }
-    salvaProdutosArquivo(lista);
+    saveProductsToFile(lista);
     puts("SAINDO...");
 
     return 0;
