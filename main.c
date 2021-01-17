@@ -51,7 +51,7 @@ void readsFile(products *lista){
                 strcpy(price, valores[1]);
                 componente.price = atof(price);
                 strcpy(componente.product, valores[2]);
-                strcpy(quantity, valores[0]);
+                strcpy(quantity, valores[3]);
                 componente.quantity = atoi(quantity);
                 registerProduct(componente, aux);
             }else{
