@@ -8,13 +8,13 @@ typedef struct{
     int id;
     char product[MAX_DESCR + 1];
     double price;
-    int quantidade;
+    int quantity;
 } product;
 
 typedef struct products{
 
     product prd;
-    struct products *nextProduto;
+    struct products *nextProduct;
 
 } products;
 
@@ -32,7 +32,7 @@ void readsFile(products *lista){
     char *texto;
     char valores[6][50];
     if(ptArq == NULL){
-        printf("\tOCORREU UM PROBLEMA AO ABRIR O ARQUIVO OU ARQUIVO INEXISTENTE\n");
+        printf("\tA PROBLEM OCCURRED OPENING THE NON-EXISTING FILE OR FILE\n");
         return 0;
     }else{
         while (fgets(linha, 300, ptArq) != NULL){
@@ -45,17 +45,17 @@ void readsFile(products *lista){
                 i++;
             }/* ORGANIZAR ESTA PARTE DO CÓDIGO */
             if(linha != NULL){
-                char price[10], quantidade[10], id[10];
+                char price[10], quantity[10], id[10];
                 strcpy(id, valores[0]);
                 componente.id = atoi(id);
                 strcpy(price, valores[1]);
                 componente.price = atof(price);
                 strcpy(componente.product, valores[2]);
-                strcpy(quantidade, valores[0]);
-                componente.quantidade = atoi(quantidade);
+                strcpy(quantity, valores[0]);
+                componente.quantity = atoi(quantity);
                 registerProduct(componente, aux);
             }else{
-                puts("productS CARREGADOS");
+                puts("LOADED PRODUCTS");
             }
         }
         /* TO_DO - IMPLEMENTAR ATRIBUIÇÃO OS DADOS A ESTRUTURA OU CRIAR UMA FUNÇÃO A PARTE QUE RECEBA A LINHA*/
@@ -71,11 +71,11 @@ products *allocatesNewProduct(product componente){
     if (novoProduct != NULL)
     {
         novoProduct->prd = componente;
-        novoProduct->nextProduto = NULL;
+        novoProduct->nextProduct = NULL;
     }
     else
     {
-        printf("ERRO AO ALOCAR MEMORIA\n");
+        printf("ERROR ALLOCATING MEMORY\n");
     }
     return novoProduct;
 }
@@ -86,30 +86,30 @@ void registerProduct(product componente, products *lista){
 
     novoProduct = allocatesNewProduct(componente);
     /* PRIORIDADE */
-    if (lista->nextProduto == NULL){
-        lista->nextProduto = novoProduct;
+    if (lista->nextProduct == NULL){
+        lista->nextProduct = novoProduct;
     }
     else{
         /* CABEÇA */
         aux = lista;
-        while (aux->nextProduto != NULL && aux->prd.id != novoProduct->prd.id){
-            aux = aux->nextProduto;
+        while (aux->nextProduct != NULL && aux->prd.id != novoProduct->prd.id){
+            aux = aux->nextProduct;
         }
         if(aux->prd.id == novoProduct->prd.id){
-            printf("Deseja adicionar mais produtos? \n1 -> SIM ou 2 -> NAO\n");
+            printf("DO YOU WANT TO ADD MORE PRODUCTS? \n1 -> YES or 2 -> NO\n");
             int ope = -1;
             scanf("%d", &ope);
             if(ope == 1){
                 aux->prd.id = novoProduct->prd.id;
-                aux->prd.quantidade += novoProduct->prd.quantidade;
+                aux->prd.quantity += novoProduct->prd.quantity;
             }else{
-                printf("NAO PODEMOS SUBSTITUIR O PRODUTO");
+                printf("WE CANNOT REPLACE THE PRODUCT");
             }
             
         }else{
             /* INSERÇÃO */
-            novoProduct->nextProduto = aux->nextProduto;
-            aux->nextProduto = novoProduct;
+            novoProduct->nextProduct = aux->nextProduct;
+            aux->nextProduct = novoProduct;
         }
     }
 }
@@ -117,15 +117,16 @@ void registerProduct(product componente, products *lista){
 void printList(products *lista){
     products *aux = NULL;
 
-    if(lista->nextProduto != NULL){
-        for (aux = lista->nextProduto; aux != NULL; aux = aux->nextProduto){
-            printf("%02d |", aux->prd.id);
-            printf(" %.2lf |", aux->prd.price);
-            printf("%s", aux->prd.product);
-            printf(" | %02d\n", aux->prd.quantidade);
+    if(lista->nextProduct != NULL){
+        printf("ID | PRICE | QUANTITY | PRODUCT NAME:\n");
+        for (aux = lista->nextProduct; aux != NULL; aux = aux->nextProduct){
+            printf("%02d | ", aux->prd.id);
+            printf("%.2lf | ", aux->prd.price);
+            printf("%02d | ", aux->prd.quantity);
+            printf("%s\n", aux->prd.product);
         }
     }else{
-        printf("NENHUM PRODUTO CADASTRADO!\n");
+        printf("NO REGISTERED PRODUCTS!\n");
     }
 }
 
@@ -134,20 +135,20 @@ void printProductsById(products *lista, int id){
 
     aux = lista;
 
-    if(aux->nextProduto != NULL){
-        while (aux->nextProduto != NULL && aux->prd.id != id){
-            aux = aux->nextProduto;
+    if(aux->nextProduct != NULL){
+        while (aux->nextProduct != NULL && aux->prd.id != id){
+            aux = aux->nextProduct;
         }
         if(aux->prd.id == id){
             printf("%02d |", aux->prd.id);
             printf(" %.2lf |", aux->prd.price);
             printf("%s", aux->prd.product);
-            printf(" | %02d\n", aux->prd.quantidade);
+            printf(" | %02d\n", aux->prd.quantity);
         }else{
-            printf("ID NAO ENCONTRADO!\n");
+            printf("ID NOT EXISTS!\n");
         }
     }else{
-        printf("NENHUM PRODUTO CADASTRADO!\n");
+        printf("NO PRODUCTS REGISTERED!\n");
     }
 }
 
@@ -159,47 +160,47 @@ void printProductsByName(products *lista, char *prod){
 
     aux = lista;
 
-    if(aux->nextProduto != NULL){
-        while (aux->nextProduto != NULL){
-            ptAux = strstr(aux->nextProduto->prd.product, prod);
+    if(aux->nextProduct != NULL){
+        while (aux->nextProduct != NULL){
+            ptAux = strstr(aux->nextProduct->prd.product, prod);
             if(ptAux != NULL){
-                printf("%02d", aux->nextProduto->prd.id);
-                printf(" %.2lf", aux->nextProduto->prd.price);
-                printf(" %s", aux->nextProduto->prd.product);
-                printf(" %d\n", aux->nextProduto->prd.quantidade);
-                aux = aux->nextProduto;
+                printf("%02d", aux->nextProduct->prd.id);
+                printf(" %.2lf", aux->nextProduct->prd.price);
+                printf(" %s", aux->nextProduct->prd.product);
+                printf(" %d\n", aux->nextProduct->prd.quantity);
+                aux = aux->nextProduct;
             }else if(aux == NULL){
-                printf("PRODUTO NAO ENCONTRADO!\n");
-                aux = aux->nextProduto;
+                printf("PRODUCT NOT EXISTS\n");
+                aux = aux->nextProduct;
             }
         }
     }else{
-        printf("NENHUM PRODUTO CADASTRADO!\n");
+        printf("NO PRODUCTS REGISTERED!\n");
     }
 }
 
 void menu(){
-    printf("\tBEM-VINDO AO MERCADIN\n");
-    printf("\tESCOLHA UMA OPCAO\n");
-    printf("\t1-CADASTRAR PRODUTO\n");
-    printf("\t2-LISTAR PRODUTOS\n");
-    printf("\t3-GERENCIAR PRODUTOS POR ID\n");
-    printf("\t4-GERENCIAR PRODUTOS POR NOME\n");
-    printf("\t10-SAIR\n\t");
+    printf("\tWELCOME THE MERCADIN\n");
+    printf("\tCHOOSE AN OPTION\n");
+    printf("\t1-REGISTER PRODUCT\n");
+    printf("\t2-LIST PRODUCTS\n");
+    printf("\t3-MANAGE PRODUCTS BY ID\n");
+    printf("\t4-MANAGE PRODUCTS BY NAME\n");
+    printf("\t10-EXIT\n\t");
 }
 void subMenuID(){
-    printf("\tBEM-VINDO AO MERCADIN\n");
-    printf("\tESCOLHA UMA OPCAO\n");
-    printf("\t1-PROCURAR PRODUTO POR ID\n");
-    printf("\t2-EDITAR PRODUTO POR ID\n");
-    printf("\t10-VOLTAR\n\t");
+    printf("\tWELCOME THE MERCADIN\n");
+    printf("\tCHOOSE AN OPTION\n");
+    printf("\t1-SEARCH PRODUCT BY ID\n");
+    printf("\t2-EDIT PRODUCT BY ID\n");
+    printf("\t10-RETURN\n\t");
 }
 void subMenuNome(){
-    printf("\tBEM-VINDO AO MERCADIN\n");
-    printf("\tESCOLHA UMA OPCAO\n");
-    printf("\t1-PROCURAR PRODUTO POR NOME\n");
-    printf("\t2-EDITAR PRODUTO POR NOME\n");
-    printf("\t10-VOLTAR\n\t");
+    printf("\tWELCOME THE MERCADIN\n");
+    printf("\tCHOOSE AN OPTION\n");
+    printf("\t1-SEARCH PRODUCT BY NAME\n");
+    printf("\t2-EDIT PRODUCT BY NAME\n");
+    printf("\t10-RETURN\n\t");
 }
 
 void saveProductsToFile(products *lista){
@@ -211,14 +212,14 @@ void saveProductsToFile(products *lista){
     arquivo = fopen("arquivo.txt", "w");
 
     if(arquivo == NULL){
-        printf("OCORREU UM ERRO NA ABERTURA\n");
-    }else if(lista->nextProduto != NULL){
-        for (aux = lista->nextProduto; aux != NULL; aux = aux->nextProduto){
-            fprintf(arquivo, "%02d;%.2lf;%s;%02d;\n", aux->prd.id, aux->prd.price, aux->prd.product, aux->prd.quantidade);
+        printf("OPENING ERROR OCCURRED\n");
+    }else if(lista->nextProduct != NULL){
+        for (aux = lista->nextProduct; aux != NULL; aux = aux->nextProduct){
+            fprintf(arquivo, "%02d;%.2lf;%s;%02d;\n", aux->prd.id, aux->prd.price, aux->prd.product, aux->prd.quantity);
         }
-        printf("SALVO COM SUCESSO!\n");
+        printf("SAVED SUCCESSFULLY!\n");
     }else{
-        printf("NENHUM PRODUTO CADASTRADO!\n");
+        printf("NO PRODUCTS REGISTERED!\n");
     } 
     fclose(arquivo);
 }
@@ -228,7 +229,7 @@ int main(){
 
     products cabeca, *lista;
 
-    cabeca.nextProduto = NULL;
+    cabeca.nextProduct = NULL;
 
     lista = &cabeca;
 
@@ -244,15 +245,15 @@ int main(){
         if(escolha == 1){
             int opcao = -1;
             while(opcao != 2){
-                printf("Insira ID | price | QUANTIDADE | PRODUTO:\n");
+                printf("INSERT IN ORDER\nID | PRICE | QUANTITY | PRODUCT NAME:\n");
                 
                 scanf("%d", &(componente.id));
                 scanf("%lf", &(componente.price));
-                scanf("%d", &(componente.quantidade));
+                scanf("%d", &(componente.quantity));
                 scanf("%[^\n]s", &(componente.product));
                 
                 registerProduct(componente, lista);
-                printf("DESEJA CADASTRAR MAIS ALGUM PRODUTO?\n1 - CADASTRAR ou 2 - NAO CADASTRAR: ");
+                printf("WANT TO REGISTER ANY OTHER PRODUCTS?\n1 - REGISTER ou 2 - NO REGISTER: ");
                 scanf("%d", &opcao);
             }
         }else if(escolha == 2){
@@ -262,11 +263,11 @@ int main(){
             int opcao = -1;           
             while(opcao != 10){
                 subMenuID();
-                printf("ESCOLHA UMA OPCAO: ");
+                printf("CHOOSE AN OPTION: ");
                 scanf("%d", &opcao);
                 
                 if(opcao == 1){
-                    printf("INSIRA O ID: ");
+                    printf("INSERT ID: ");
                     scanf("%d", &id);
                     printProductsById(lista, id);
                     system("pause");
@@ -279,13 +280,13 @@ int main(){
         }else if(escolha == 4){
             int opcao = -1;
             fflush(stdin);
-            printf("INSIRA O NOME DO PRODUTO: ");
+            printf("INSERT PRODUCT NAME: ");
             scanf("%[^\n]s", palavra);
             printProductsByName(lista, palavra);
             
             while(opcao != 10){
                 subMenuNome();
-                puts("DESEJA PROCURAR OU EDITAR?\n1-PROCURAR ou 2-EDITAR\n");
+                puts("DO YOU WANT TO SEARCH OR EDIT?\n1-SEARCH ou 2-EDIT\n");
                 scanf("%d", &opcao);
             }
         }else if(escolha == 10){
@@ -295,7 +296,7 @@ int main(){
         scanf("%d", &escolha);
     }
     saveProductsToFile(lista);
-    puts("SAINDO...");
+    puts("GOING OUT...");
 
     return 0;
 }
