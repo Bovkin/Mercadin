@@ -123,9 +123,61 @@ void editProductId(product component, products *list, int id){
                 scanf("%d", &newQuantityAdd);
                 aux->prd.quantity += newQuantityAdd;
             }
+            printf("DO YOU WANT EDIT WHAT PROPERTY? \n1 -> PRODUCT NAME\n2 -> QUANTITY OF PRODUCTS\n3 -> PRODUCT PRICE\n4 -> ADD PRODUCT QUANTITY\n10 -> RETURN\n");
+            scanf("%d", &ope);
         }
     }
 }
+
+void editProductName(product component, products *list, char *name){
+
+    products *aux;
+
+    /* CABEÇA */
+    aux = list;
+    while (aux->nextProduct != NULL && strcmp(aux->prd.product, name) != 0){
+        aux = aux->nextProduct;
+    }
+    if(strcmp(aux->prd.product, name) == 0){
+        printf("DO YOU WANT EDIT WHAT PROPERTY? \n1 -> PRODUCT NAME\n2 -> QUANTITY OF PRODUCTS\n3 -> PRODUCT PRICE\n4 -> ADD PRODUCT QUANTITY\n10 -> RETURN\n");
+        int ope = -1;
+        scanf("%d", &ope);
+        while(ope != 10){
+            if(ope == 1){
+                char newName[MAX_DESCR];
+                printf("NAME PRODUCT IS: %s\n", aux->prd.product);
+                printf("WHAT IS THE NEW PRODUCT NAME?\n");
+                fflush(stdin);
+                scanf("%[^\n]s", newName);
+                strcpy(aux->prd.product, newName);
+            }else if(ope == 2){
+                int newQuantity;
+                printf("NAME PRODUCT IS: %s\n", aux->prd.product);
+                printf("QUANTITY PRODUCT IS: %d\n", aux->prd.quantity);
+                printf("WHAT IS THE NEW PRODUCT QUANTITY?\n");
+                scanf("%d", &newQuantity);
+                aux->prd.quantity = newQuantity;
+            }else if(ope == 3){
+                double newPrice;
+                printf("NAME PRODUCT IS: %s\n", aux->prd.product);
+                printf("PRICE PRODUCT IS: %.2lf\n", aux->prd.price);
+                printf("WHAT IS THE NEW PRODUCT PRICE?\n");
+                scanf("%lf", &newPrice);
+                aux->prd.price = newPrice;
+            }else if(ope == 4){
+                int newQuantityAdd;
+                printf("NAME PRODUCT IS: %s\n", aux->prd.product);
+                printf("QUANTITY PRODUCT IS: %d\n", aux->prd.quantity);
+                printf("WHAT IS THE NEW PRODUCT ADD QUANTITY?\n");
+                scanf("%d", &newQuantityAdd);
+                aux->prd.quantity += newQuantityAdd;
+            }
+            printf("DO YOU WANT EDIT WHAT PROPERTY? \n1 -> PRODUCT NAME\n2 -> QUANTITY OF PRODUCTS\n3 -> PRODUCT PRICE\n4 -> ADD PRODUCT QUANTITY\n10 -> RETURN\n");
+            scanf("%d", &ope);
+        }
+    }
+}
+
 
 void registerProduct(product component, products *list){
     products *newProduct, *aux;
@@ -186,7 +238,7 @@ void printProductsById(products *list, int id){
         }
         if(aux->prd.id == id){
             printf("%02d |", aux->prd.id);
-            printf(" %.2lf |", aux->prd.price);
+            printf(" %.2lf | ", aux->prd.price);
             printf("%s", aux->prd.product);
             printf(" | %02d\n", aux->prd.quantity);
         }else{
@@ -200,24 +252,21 @@ void printProductsById(products *list, int id){
 
 void printProductsByName(products *list, char *prod){
     products *aux;
-
     char *ptAux;
 
     aux = list;
 
     if(aux->nextProduct != NULL){
-        while (aux->nextProduct != NULL){
-            ptAux = strstr(aux->nextProduct->prd.product, prod);
-            if(ptAux != NULL){
-                printf("%02d", aux->nextProduct->prd.id);
-                printf(" %.2lf", aux->nextProduct->prd.price);
-                printf(" %s", aux->nextProduct->prd.product);
-                printf(" %d\n", aux->nextProduct->prd.quantity);
-                aux = aux->nextProduct;
-            }else if(aux == NULL){
-                printf("PRODUCT NOT EXISTS\n");
-                aux = aux->nextProduct;
-            }
+        while (aux->nextProduct != NULL && strcmp(aux->prd.product, prod) != 0){
+            aux = aux->nextProduct;
+        }
+        if(strcmp(aux->prd.product, prod) == 0){
+            printf("%02d |", aux->prd.id);
+            printf(" %.2lf | ", aux->prd.price);
+            printf("%s", aux->prd.product);
+            printf(" | %02d\n", aux->prd.quantity);
+        }else{
+            printf("ID NOT EXISTS!\n");
         }
     }else{
         printf("NO PRODUCTS REGISTERED!\n");
@@ -291,12 +340,12 @@ int main(){
             int option = -1;
             while(option != 2){
                 printf("INSERT IN ORDER\nID | PRICE | QUANTITY | PRODUCT NAME:\n");
-                
+
                 scanf("%d", &(component.id));
                 scanf("%lf", &(component.price));
-                scanf("%d", &(component.quantity));
+                scanf("%d ", &(component.quantity));
                 scanf("%[^\n]s", &(component.product));
-                
+
                 registerProduct(component, list);
                 printf("WANT TO REGISTER ANY OTHER PRODUCTS?\n1 - REGISTER or 2 - NO REGISTER: ");
                 scanf("%d", &option);
@@ -308,7 +357,6 @@ int main(){
             int option = -1;           
             while(option != 10){
                 subMenuID();
-                /*printf("CHOOSE AN OPTION: ");*/
                 scanf("%d", &option);
                 
                 if(option == 1){
@@ -325,18 +373,30 @@ int main(){
                     system("clear||cls");
                 }
             }
-            
         }else if(choice == 4){
-            int option = -1;
-            fflush(stdin);
-            printf("INSERT PRODUCT NAME: ");
-            scanf("%[^\n]s", word);
-            printProductsByName(list, word);
-            
+            system("clear||cls");
+            int option = -1;       
             while(option != 10){
                 subMenuName();
-                puts("DO YOU WANT TO SEARCH OR EDIT?\n1-SEARCH or 2-EDIT\n");
                 scanf("%d", &option);
+                
+                if(option == 1){
+                    printf("INSERT NAME: ");
+                    fflush(stdin);
+                    scanf("%[^\n]s", word);
+                    printProductsByName(list, word);
+                    system("pause");
+                    system("clear||cls");
+                }else if(option == 2){
+                    printf("INSERT NAME: ");
+                    fflush(stdin);
+                    scanf("%[^\n]s", word);
+                    editProductName(component, list, word);
+                    system("pause");
+                    system("clear||cls");
+                }else if(option == 10){
+                    system("clear||cls");
+                }
             }
         }else if(choice == 10){
             return 0;
