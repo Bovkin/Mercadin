@@ -19,11 +19,11 @@ typedef struct products{
 } products;
 
 
-void readsFile(products *lista){
+void readsFile(products *list){
 
-    products *aux = lista;
+    products *aux = list;
 
-    product componente;
+    product component;
 
     FILE *ptArq;
     ptArq = fopen("arquivo.txt", "r");
@@ -47,13 +47,13 @@ void readsFile(products *lista){
             if(lineOfArchiveText != NULL){
                 char price[10], quantity[10], id[10];
                 strcpy(id, values[0]);
-                componente.id = atoi(id);
+                component.id = atoi(id);
                 strcpy(price, values[1]);
-                componente.price = atof(price);
-                strcpy(componente.product, values[2]);
+                component.price = atof(price);
+                strcpy(component.product, values[2]);
                 strcpy(quantity, values[3]);
-                componente.quantity = atoi(quantity);
-                registerProduct(componente, aux);
+                component.quantity = atoi(quantity);
+                registerProduct(component, aux);
             }else{
                 puts("LOADED PRODUCTS");
             }
@@ -64,62 +64,62 @@ void readsFile(products *lista){
 }
 
 
-products *allocatesNewProduct(product componente){
-    products *novoProduct;
+products *allocatesNewProduct(product component){
+    products *newProduct;
 
-    novoProduct = (products *)malloc(sizeof(products));
-    if (novoProduct != NULL)
+    newProduct = (products *)malloc(sizeof(products));
+    if (newProduct != NULL)
     {
-        novoProduct->prd = componente;
-        novoProduct->nextProduct = NULL;
+        newProduct->prd = component;
+        newProduct->nextProduct = NULL;
     }
     else
     {
         printf("ERROR ALLOCATING MEMORY\n");
     }
-    return novoProduct;
+    return newProduct;
 }
 
 
-void registerProduct(product componente, products *lista){
-    products *novoProduct, *aux;
+void registerProduct(product component, products *list){
+    products *newProduct, *aux;
 
-    novoProduct = allocatesNewProduct(componente);
+    newProduct = allocatesNewProduct(component);
     /* PRIORIDADE */
-    if (lista->nextProduct == NULL){
-        lista->nextProduct = novoProduct;
+    if (list->nextProduct == NULL){
+        list->nextProduct = newProduct;
     }
     else{
         /* CABEÇA */
-        aux = lista;
-        while (aux->nextProduct != NULL && aux->prd.id != novoProduct->prd.id){
+        aux = list;
+        while (aux->nextProduct != NULL && aux->prd.id != newProduct->prd.id){
             aux = aux->nextProduct;
         }
-        if(aux->prd.id == novoProduct->prd.id){
+        if(aux->prd.id == newProduct->prd.id){
             printf("DO YOU WANT TO ADD MORE PRODUCTS? \n1 -> YES or 2 -> NO\n");
             int ope = -1;
             scanf("%d", &ope);
             if(ope == 1){
-                aux->prd.id = novoProduct->prd.id;
-                aux->prd.quantity += novoProduct->prd.quantity;
+                aux->prd.id = newProduct->prd.id;
+                aux->prd.quantity += newProduct->prd.quantity;
             }else{
                 printf("WE CANNOT REPLACE THE PRODUCT");
             }
             
         }else{
             /* INSERÇÃO */
-            novoProduct->nextProduct = aux->nextProduct;
-            aux->nextProduct = novoProduct;
+            newProduct->nextProduct = aux->nextProduct;
+            aux->nextProduct = newProduct;
         }
     }
 }
 
-void printList(products *lista){
+void printList(products *list){
     products *aux = NULL;
 
-    if(lista->nextProduct != NULL){
+    if(list->nextProduct != NULL){
         printf("ID | PRICE | QUANTITY | PRODUCT NAME:\n");
-        for (aux = lista->nextProduct; aux != NULL; aux = aux->nextProduct){
+        for (aux = list->nextProduct; aux != NULL; aux = aux->nextProduct){
             printf("%02d | ", aux->prd.id);
             printf("%.2lf | ", aux->prd.price);
             printf("%02d | ", aux->prd.quantity);
@@ -130,10 +130,10 @@ void printList(products *lista){
     }
 }
 
-void printProductsById(products *lista, int id){
+void printProductsById(products *list, int id){
     products *aux;
 
-    aux = lista;
+    aux = list;
 
     if(aux->nextProduct != NULL){
         while (aux->nextProduct != NULL && aux->prd.id != id){
@@ -153,12 +153,12 @@ void printProductsById(products *lista, int id){
 }
 
 
-void printProductsByName(products *lista, char *prod){
+void printProductsByName(products *list, char *prod){
     products *aux;
 
     char *ptAux;
 
-    aux = lista;
+    aux = list;
 
     if(aux->nextProduct != NULL){
         while (aux->nextProduct != NULL){
@@ -203,99 +203,99 @@ void subMenuNome(){
     printf("\t10-RETURN\n\t");
 }
 
-void saveProductsToFile(products *lista){
+void saveProductsToFile(products *list){
 	
 	products *aux = NULL;
 
-    FILE *arquivo;
+    FILE *archive;
 
-    arquivo = fopen("arquivo.txt", "w");
+    archive = fopen("arquivo.txt", "w");
 
-    if(arquivo == NULL){
+    if(archive == NULL){
         printf("OPENING ERROR OCCURRED\n");
-    }else if(lista->nextProduct != NULL){
-        for (aux = lista->nextProduct; aux != NULL; aux = aux->nextProduct){
-            fprintf(arquivo, "%02d;%.2lf;%s;%02d;\n", aux->prd.id, aux->prd.price, aux->prd.product, aux->prd.quantity);
+    }else if(list->nextProduct != NULL){
+        for (aux = list->nextProduct; aux != NULL; aux = aux->nextProduct){
+            fprintf(archive, "%02d;%.2lf;%s;%02d;\n", aux->prd.id, aux->prd.price, aux->prd.product, aux->prd.quantity);
         }
         printf("SAVED SUCCESSFULLY!\n");
     }else{
         printf("NO PRODUCTS REGISTERED!\n");
     } 
-    fclose(arquivo);
+    fclose(archive);
 }
 
 
 int main(){
 
-    products cabeca, *lista;
+    products headOfList, *list;
 
-    cabeca.nextProduct = NULL;
+    headOfList.nextProduct = NULL;
 
-    lista = &cabeca;
+    list = &headOfList;
 
-    product componente;
+    product component;
 
-    int escolha = -1;
+    int choice = -1;
     int id = -1;
-    char palavra[MAX_DESCR + 1];
+    char word[MAX_DESCR + 1];
     
-    readsFile(lista);
+    readsFile(list);
 
-    while(escolha != 10){
-        if(escolha == 1){
-            int opcao = -1;
-            while(opcao != 2){
+    while(choice != 10){
+        if(choice == 1){
+            int option = -1;
+            while(option != 2){
                 printf("INSERT IN ORDER\nID | PRICE | QUANTITY | PRODUCT NAME:\n");
                 
-                scanf("%d", &(componente.id));
-                scanf("%lf", &(componente.price));
-                scanf("%d", &(componente.quantity));
-                scanf("%[^\n]s", &(componente.product));
+                scanf("%d", &(component.id));
+                scanf("%lf", &(component.price));
+                scanf("%d", &(component.quantity));
+                scanf("%[^\n]s", &(component.product));
                 
-                registerProduct(componente, lista);
-                printf("WANT TO REGISTER ANY OTHER PRODUCTS?\n1 - REGISTER ou 2 - NO REGISTER: ");
-                scanf("%d", &opcao);
+                registerProduct(component, list);
+                printf("WANT TO REGISTER ANY OTHER PRODUCTS?\n1 - REGISTER or 2 - NO REGISTER: ");
+                scanf("%d", &option);
             }
-        }else if(escolha == 2){
-            printList(lista);
-        }else if(escolha == 3){
+        }else if(choice == 2){
+            printList(list);
+        }else if(choice == 3){
             system("clear||cls");
-            int opcao = -1;           
-            while(opcao != 10){
+            int option = -1;           
+            while(option != 10){
                 subMenuID();
                 printf("CHOOSE AN OPTION: ");
-                scanf("%d", &opcao);
+                scanf("%d", &option);
                 
-                if(opcao == 1){
+                if(option == 1){
                     printf("INSERT ID: ");
                     scanf("%d", &id);
-                    printProductsById(lista, id);
+                    printProductsById(list, id);
                     system("pause");
                     system("clear||cls");
-                }else if(opcao == 10){
+                }else if(option == 10){
                     system("clear||cls");
                 }
             }
             
-        }else if(escolha == 4){
-            int opcao = -1;
+        }else if(choice == 4){
+            int option = -1;
             fflush(stdin);
             printf("INSERT PRODUCT NAME: ");
-            scanf("%[^\n]s", palavra);
-            printProductsByName(lista, palavra);
+            scanf("%[^\n]s", word);
+            printProductsByName(list, word);
             
-            while(opcao != 10){
+            while(option != 10){
                 subMenuNome();
-                puts("DO YOU WANT TO SEARCH OR EDIT?\n1-SEARCH ou 2-EDIT\n");
-                scanf("%d", &opcao);
+                puts("DO YOU WANT TO SEARCH OR EDIT?\n1-SEARCH or 2-EDIT\n");
+                scanf("%d", &option);
             }
-        }else if(escolha == 10){
+        }else if(choice == 10){
             return 0;
         }
         menu();
-        scanf("%d", &escolha);
+        scanf("%d", &choice);
     }
-    saveProductsToFile(lista);
+    saveProductsToFile(list);
     puts("GOING OUT...");
 
     return 0;
