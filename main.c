@@ -80,6 +80,52 @@ products *allocatesNewProduct(product component){
     return newProduct;
 }
 
+void editProductId(product component, products *list, int id){
+
+    products *aux;
+
+    /* CABEÇA */
+    aux = list;
+    while (aux->nextProduct != NULL && aux->prd.id != id){
+        aux = aux->nextProduct;
+    }
+    if(aux->prd.id == id){
+        printf("DO YOU WANT EDIT WHAT PROPERTY? \n1 -> PRODUCT NAME\n2 -> QUANTITY OF PRODUCTS\n3 -> PRODUCT PRICE\n4 -> ADD PRODUCT QUANTITY\n10 -> RETURN\n");
+        int ope = -1;
+        scanf("%d", &ope);
+        while(ope != 10){
+            if(ope == 1){
+                char newName[MAX_DESCR];
+                printf("NAME PRODUCT IS: %s\n", aux->prd.product);
+                printf("WHAT IS THE NEW PRODUCT NAME?\n");
+                fflush(stdin);
+                scanf("%[^\n]s", newName);
+                strcpy(aux->prd.product, newName);
+            }else if(ope == 2){
+                int newQuantity;
+                printf("NAME PRODUCT IS: %s\n", aux->prd.product);
+                printf("QUANTITY PRODUCT IS: %d\n", aux->prd.quantity);
+                printf("WHAT IS THE NEW PRODUCT QUANTITY?\n");
+                scanf("%d", &newQuantity);
+                aux->prd.quantity = newQuantity;
+            }else if(ope == 3){
+                double newPrice;
+                printf("NAME PRODUCT IS: %s\n", aux->prd.product);
+                printf("PRICE PRODUCT IS: %.2lf\n", aux->prd.price);
+                printf("WHAT IS THE NEW PRODUCT PRICE?\n");
+                scanf("%lf", &newPrice);
+                aux->prd.price = newPrice;
+            }else if(ope == 4){
+                int newQuantityAdd;
+                printf("NAME PRODUCT IS: %s\n", aux->prd.product);
+                printf("QUANTITY PRODUCT IS: %d\n", aux->prd.quantity);
+                printf("WHAT IS THE NEW PRODUCT ADD QUANTITY?\n");
+                scanf("%d", &newQuantityAdd);
+                aux->prd.quantity += newQuantityAdd;
+            }
+        }
+    }
+}
 
 void registerProduct(product component, products *list){
     products *newProduct, *aux;
@@ -105,7 +151,6 @@ void registerProduct(product component, products *list){
             }else{
                 printf("WE CANNOT REPLACE THE PRODUCT");
             }
-            
         }else{
             /* INSERÇÃO */
             newProduct->nextProduct = aux->nextProduct;
@@ -195,7 +240,7 @@ void subMenuID(){
     printf("\t2-EDIT PRODUCT BY ID\n");
     printf("\t10-RETURN\n\t");
 }
-void subMenuNome(){
+void subMenuName(){
     printf("\tWELCOME THE MERCADIN\n");
     printf("\tCHOOSE AN OPTION\n");
     printf("\t1-SEARCH PRODUCT BY NAME\n");
@@ -263,7 +308,7 @@ int main(){
             int option = -1;           
             while(option != 10){
                 subMenuID();
-                printf("CHOOSE AN OPTION: ");
+                /*printf("CHOOSE AN OPTION: ");*/
                 scanf("%d", &option);
                 
                 if(option == 1){
@@ -272,6 +317,10 @@ int main(){
                     printProductsById(list, id);
                     system("pause");
                     system("clear||cls");
+                }else if(option == 2){
+                    printf("INSERT ID: ");
+                    scanf("%d", &id);
+                    editProductId(component, list, id);
                 }else if(option == 10){
                     system("clear||cls");
                 }
@@ -285,7 +334,7 @@ int main(){
             printProductsByName(list, word);
             
             while(option != 10){
-                subMenuNome();
+                subMenuName();
                 puts("DO YOU WANT TO SEARCH OR EDIT?\n1-SEARCH or 2-EDIT\n");
                 scanf("%d", &option);
             }
