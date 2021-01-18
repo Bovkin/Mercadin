@@ -27,31 +27,31 @@ void readsFile(products *lista){
 
     FILE *ptArq;
     ptArq = fopen("arquivo.txt", "r");
-    char linha[300];
+    char lineOfArchiveText[300];
     char *sub;
-    char *texto;
-    char valores[6][50];
+    char *text;
+    char values[6][50];
     if(ptArq == NULL){
         printf("\tA PROBLEM OCCURRED OPENING THE NON-EXISTING FILE OR FILE\n");
         return 0;
     }else{
-        while (fgets(linha, 300, ptArq) != NULL){
-            linha[strcspn(linha, "\n")] = 0;
-            texto = strtok(linha, ";");
+        while (fgets(lineOfArchiveText, 300, ptArq) != NULL){
+            lineOfArchiveText[strcspn(lineOfArchiveText, "\n")] = 0;
+            text = strtok(lineOfArchiveText, ";");
             int i = 0;
-            while(texto != NULL){
-                strcpy(valores[i],texto);
-                texto = strtok(NULL, ";");
+            while(text != NULL){
+                strcpy(values[i],text);
+                text = strtok(NULL, ";");
                 i++;
             }/* ORGANIZAR ESTA PARTE DO CÓDIGO */
-            if(linha != NULL){
+            if(lineOfArchiveText != NULL){
                 char price[10], quantity[10], id[10];
-                strcpy(id, valores[0]);
+                strcpy(id, values[0]);
                 componente.id = atoi(id);
-                strcpy(price, valores[1]);
+                strcpy(price, values[1]);
                 componente.price = atof(price);
-                strcpy(componente.product, valores[2]);
-                strcpy(quantity, valores[3]);
+                strcpy(componente.product, values[2]);
+                strcpy(quantity, values[3]);
                 componente.quantity = atoi(quantity);
                 registerProduct(componente, aux);
             }else{
