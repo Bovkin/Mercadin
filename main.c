@@ -1,3 +1,10 @@
+/* 
+
+AUTHOR: ELTON IGOR CUNHA PEREIRA
+GOAL: LEARNING
+
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -302,6 +309,14 @@ void saveProductsToFile(products *list){
 	products *aux = NULL;
 
     FILE *archive;
+
+    /*
+
+    Tornar o nome dinamico, conforme o usuario quiser. 
+    Após escolhido um nome, se for salvar novamente, 
+    questionar se deseja salvar no mesmo arquivo ou em um novo.
+    
+    */
 
     archive = fopen("arquivo.txt", "w");
 
