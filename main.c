@@ -350,6 +350,13 @@ int main(){
     
     readsFile(list);
 
+
+    /*
+
+    COMEÇAR A DESMEMBRAR FUNÇÕES DO CÓDIGO EM HEADERS E ADICIONAR FUNÇÕES DE MENUS PARA REUTILIZAÇÃO DE CODIGO.
+
+    */
+
     while(choice != 10){
         if(choice == 1){
             int option = -1;
