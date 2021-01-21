@@ -32,6 +32,16 @@ void readsFile(products *list){
 
     product component;
 
+
+    /*
+
+    Tornar o nome dinamico, conforme o usuario quiser. 
+    Após escolhido um nome, se for carregar novamente, 
+    questionar se deseja carregar no mesmo arquivo ou em um novo.
+    
+    */
+
+
     FILE *ptArq;
     ptArq = fopen("arquivo.txt", "r");
     char lineOfArchiveText[300];
