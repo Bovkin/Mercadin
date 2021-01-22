@@ -9,3 +9,5 @@ This is a simples program in C for markets.
 - Search and Edit products by Id
 - Search and Edit products by Name
 - Save products in the .txt
+
+---
