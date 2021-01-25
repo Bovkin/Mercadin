@@ -1,3 +1,12 @@
+/* 
+
+AUTHOR: ELTON IGOR CUNHA PEREIRA
+GOAL: LEARNING
+
+Archive .c about products
+
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

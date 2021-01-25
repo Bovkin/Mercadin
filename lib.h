@@ -1,3 +1,12 @@
+/* 
+
+AUTHOR: ELTON IGOR CUNHA PEREIRA
+GOAL: LEARNING
+
+Header about products
+
+*/
+
 #define MAX_DESCR 50
 #define MAX 200
 
